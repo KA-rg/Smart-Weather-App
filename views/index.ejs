@@ -1,0 +1,19 @@
+<%- include('layout', { body: `
+<section class="hero">
+  <div class="card-3d" id="tilt-card">
+    <div class="card-inner">
+      <h1 class="title">3D Weather App</h1>
+      <p class="subtitle">Enter a city, town or postal code to get weather info</p>
+
+      ${error ? `<div class="error">${error}</div>` : ''}
+
+      <form action="/weather" method="post" class="search-form">
+        <input required name="location" type="text" placeholder="e.g., London, New York, 110001" class="input" />
+        <button class="btn" type="submit">Get Weather</button>
+      </form>
+
+      <div class="note">Powered by WeatherAPI</div>
+    </div>
+  </div>
+</section>
+` }) %>
