@@ -1,19 +1,23 @@
-<%- include('layout', { body: `
-<section class="hero">
-  <div class="card-3d" id="tilt-card">
-    <div class="card-inner">
-      <h1 class="title">3D Weather App</h1>
-      <p class="subtitle">Enter a city, town or postal code to get weather info</p>
+<section class="center-wrap">
 
-      ${error ? `<div class="error">${error}</div>` : ''}
+  <div class="glass search-card">
+    <h1 class="title">Search Weather</h1>
+    <% if (error) { %>
+      <div class="error"><%= error %></div>
+    <% } %>
 
-      <form action="/weather" method="post" class="search-form">
-        <input required name="location" type="text" placeholder="e.g., London, New York, 110001" class="input" />
-        <button class="btn" type="submit">Get Weather</button>
-      </form>
+    <form id="searchForm" action="/weather" method="POST" class="search-form">
+      <input id="cityInput" name="city" type="text" placeholder="City name or 'lat,lon' (auto-detect with 📍)" autocomplete="off" required />
+      <div class="row">
+        <button type="submit" class="btn">Search</button>
+        <button type="button" id="micBtn" class="btn icon">🎤</button>
+        <button type="button" id="gpsBtn" class="btn icon">📍</button>
+      </div>
+    </form>
 
-      <div class="note">Powered by WeatherAPI</div>
-    </div>
+    <div class="note">Tip: You can say "Mumbai" or click 📍 to use current location. Last searched city is saved locally.</div>
   </div>
+
+  <div class="footer-note">Built with WeatherAPI • Enter city name, postal code or "lat,lon"</div>
+
 </section>
-` }) %>

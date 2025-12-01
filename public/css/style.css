@@ -1,165 +1,93 @@
-/* styles.css - 3D-ish look */
-:root{
-  --bg: linear-gradient(180deg,#0f172a,#020617);
-  --card: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  --accent: #7dd3fc;
-  --glass: rgba(255,255,255,0.04);
-  --glass-2: rgba(255,255,255,0.02);
-  --text: #e6eef8;
-  --muted: #9fb0c8;
-}
+/* style.css - responsive, glass + 3D, mobile friendly */
 
+/* Reset & fonts */
 *{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background: var(--bg);
-  color:var(--text);
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:30px;
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial;color:#eaf2ff;background:#071129}
+a{color:inherit;text-decoration:none}
+
+/* NAV */
+.nav{width:100%;padding:12px 20px;position:fixed;top:0;left:0;z-index:60}
+.nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:700;font-size:20px}
+.icon-btn{background:rgba(255,255,255,0.12);border:0;padding:8px 10px;border-radius:8px;cursor:pointer}
+
+/* MAIN container */
+.main{padding:90px 20px 60px;display:flex;justify-content:center}
+
+/* center wrap */
+.center-wrap{max-width:1100px;width:100%}
+
+/* glass card */
+.glass{background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  border-radius:14px;padding:18px;backdrop-filter: blur(8px);box-shadow:0 6px 30px rgba(2,6,23,0.6);
+  border:1px solid rgba(255,255,255,0.03);}
+
+/* search card */
+.search-card{max-width:520px;margin:12px auto;text-align:center;transform:translateZ(0)}
+.title{font-size:24px;margin:6px 0 12px}
+input[type="text"], input[type="search"]{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit;font-size:16px}
+.row{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.btn{background:linear-gradient(90deg,#6ee7b7,#60a5fa);border:0;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn.mini{padding:8px 10px; font-size:14px}
+.btn.icon{width:48px}
+
+/* note */
+.note{margin-top:12px;color:rgba(255,255,255,0.65);font-size:13px}
+.footer-note{text-align:center;margin-top:18px;color:rgba(255,255,255,0.18)}
+
+/* weather card layout */
+.weather-card{max-width:1100px;margin:12px auto;padding:18px}
+.header-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.localtime{color:rgba(255,255,255,0.6);font-size:13px}
+.main-row{display:flex;gap:20px;align-items:center}
+.left{flex:1;display:flex;flex-direction:column;align-items:center}
+.right{width:360px}
+.icon.big{width:140px}
+.temp{font-size:48px;font-weight:800;margin-top:8px}
+.cond{font-size:18px;color:rgba(255,255,255,0.9);margin-top:6px}
+.small-stats{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap;justify-content:center;color:rgba(255,255,255,0.8)}
+.small-stats span{font-size:14px}
+
+/* chart */
+.chart-wrap{margin-top:8px;padding:10px}
+.canvas{width:100%}
+
+/* forecast grid */
+.forecast-title{text-align:left;margin:18px 0 8px;font-size:20px}
+.forecast-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.forecast-card{padding:12px;text-align:center}
+.icon.small{width:60px}
+.f-date{font-size:13px;color:rgba(255,255,255,0.7)}
+.f-cond{margin:8px 0;color:rgba(255,255,255,0.9)}
+.f-temps{display:flex;gap:8px;justify-content:center;font-size:13px}
+
+/* floating animation */
+.floating{animation:float 3s ease-in-out infinite}
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+
+/* responsive */
+@media (max-width:900px){
+  .main-row{flex-direction:column;align-items:stretch}
+  .right{width:100%}
+  .icon.big{width:110px}
 }
 
-/* container to center */
-.container{
-  width:100%;
-  max-width:1100px;
-}
+/* dark-mode override (toggle by JS) */
+body.dark-mode{background:#041225}
+body.dark-mode .glass{background:linear-gradient(180deg, rgba(0,0,0,0.28), rgba(255,255,255,0.02));box-shadow: 0 8px 40px rgba(0,0,0,0.6)}
 
-/* 3d card base */
-.card-3d{
-  perspective: 1000px;
-  transform-style: preserve-3d;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.card-3d .card-inner{
-  background: var(--card);
-  border-radius: 16px;
-  padding:24px;
-  box-shadow: 0 10px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
-  transform-style: preserve-3d;
-  backface-visibility:hidden;
-  will-change: transform;
-}
+/* BACKGROUND - full-screen canvas root (particles) */
+#bg-root{position:fixed;left:0;top:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 
-/* hero */
-.hero {
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  min-height:60vh;
-}
+/* rain droplets / snow handled in canvas overlay via JS (styled via canvas) */
 
-.title{
-  font-size:28px;
-  margin:0 0 8px;
-}
-.subtitle{
-  margin:0 0 16px;
-  color:var(--muted);
-}
+/* loading overlay */
+#loadingOverlay{position:fixed;inset:0;background:linear-gradient(180deg, rgba(2,6,23,0.7), rgba(2,6,23,0.85));display:flex;align-items:center;justify-content:center;z-index:120;visibility:hidden;opacity:0;transition:opacity 180ms}
+#loadingOverlay.show{visibility:visible;opacity:1}
+.loader {width:110px;height:110px;border-radius:20px;background:linear-gradient(180deg,#ffffff05,#ffffff03);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
+.loader .ring{width:50px;height:50px;border-radius:50%;border:5px solid rgba(255,255,255,0.06);border-top-color:#60a5fa;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader p{color:#cfe9ff;font-size:14px;margin:0}
 
-/* form */
-.search-form{
-  display:flex;
-  gap:12px;
-  align-items:center;
-  margin-top:12px;
-}
-.input{
-  padding:12px 14px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.06);
-  background:transparent;
-  color:var(--text);
-  outline:none;
-  min-width:280px;
-  font-size:14px;
-}
-.btn{
-  padding:12px 18px;
-  background:linear-gradient(90deg,var(--accent),#60a5fa);
-  border:none;
-  color:#062;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:600;
-  box-shadow: 0 6px 18px rgba(96,165,250,0.18);
-}
-
-/* result layout */
-.results .top{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:18px;
-}
-.back{
-  color:var(--muted);
-  text-decoration:none;
-}
-.place{margin:0}
-.localtime{color:var(--muted);font-size:13px}
-
-/* grid */
-.grid{
-  display:grid;
-  grid-template-columns: 1fr 380px;
-  gap:20px;
-  align-items:start;
-}
-
-/* current card specifics */
-.current-card img{width:72px;height:72px}
-.current-row{display:flex;gap:16px;align-items:center}
-.big-temp{font-size:44px;font-weight:800}
-.small{color:var(--muted)}
-.details{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px;color:var(--muted)}
-.sun{margin-top:12px;color:var(--muted)}
-
-/* forecast list */
-.forecast-list{display:flex;flex-direction:column;gap:12px}
-.forecast-day{cursor:pointer}
-.forecast-day .small{padding:12px}
-.forecast-day img{width:36px;height:36px}
-.icon-row{display:flex;gap:12px;align-items:center}
-
-/* small screens */
-@media (max-width:880px){
-  .grid{grid-template-columns:1fr; padding-bottom:40px}
-  .hero{min-height:50vh}
-}
-
-/* hovered lift */
-.card-3d:hover .card-inner{
-  transform: translateZ(30px);
-  box-shadow: 0 20px 50px rgba(2,6,23,0.8);
-}
-
-/* a subtle background decorative */
-body::after{
-  content:"";
-  position:fixed;
-  right:-15%;
-  top:-15%;
-  width:60vmax;
-  height:60vmax;
-  background:radial-gradient(circle at 30% 30%, rgba(125,211,252,0.06), transparent 10%),
-             radial-gradient(circle at 70% 70%, rgba(96,165,250,0.04), transparent 20%);
-  z-index:-1;
-  transform:rotate(20deg);
-}
-.error{
-  margin-top:10px;
-  background:rgba(255,70,70,0.08);
-  border-left:4px solid rgba(255,70,70,0.2);
-  padding:8px 12px;
-  color:#ffb3b3;
-  border-radius:6px;
-  font-size:13px;
-}
-.note{margin-top:14px;color:var(--muted);font-size:13px}
+/* small card tweak */
+.small-card{padding:10px}

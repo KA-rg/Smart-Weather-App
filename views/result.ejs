@@ -1,66 +1,66 @@
-<%- include('layout', { body: `
-<section class="results">
-  <div class="top">
-    <a href="/" class="back">← New search</a>
-    <h2 class="place">${result.location}</h2>
-    <div class="localtime">Local time: ${result.localtime}</div>
-  </div>
+<section class="center-wrap">
 
-  <div class="grid">
-    <div class="card current-card card-3d" id="current-tilt">
-      <div class="card-inner">
-        <h3>Current Conditions</h3>
-        <div class="current-row">
-          <img src="https:${result.current.condition_icon}" />
-          <div class="temps">
-            <div class="big-temp">${result.current.temp_c}°C</div>
-            <div class="small">Feels like ${result.current.feelslike_c}°C</div>
-            <div class="cond">${result.current.condition_text}</div>
-          </div>
+  <div class="glass weather-card">
+    <div class="header-row">
+      <div>
+        <h2 class="place"><%= location %></h2>
+        <div class="localtime">Local time: <%= localtime %></div>
+      </div>
+      <div class="actions-right">
+        <a href="/" class="btn mini">🔍 New Search</a>
+      </div>
+    </div>
+
+    <div class="main-row">
+      <div class="left">
+        <img class="icon big floating" src="https:<%= current.condition.icon %>" alt="icon" />
+        <div class="temp"><%= current.temp_c %>°C</div>
+        <div class="cond"><%= current.condition.text %></div>
+        <div class="small-stats">
+          <span>Feels: <strong><%= current.feelslike_c %>°C</strong></span>
+          <span>Wind: <strong><%= current.wind_kph %> kph</strong></span>
+          <span>Humidity: <strong><%= current.humidity %>%</strong></span>
         </div>
+      </div>
 
-        <div class="details">
-          <div>Wind: <strong>${result.current.wind_kph} kph</strong> (${result.current.wind_dir})</div>
-          <div>Humidity: <strong>${result.current.humidity}%</strong></div>
-          <div>Precip: <strong>${result.current.precip_mm} mm</strong></div>
-          <div>Visibility: <strong>${result.current.vis_km} km</strong></div>
-          <div>UV Index: <strong>${result.current.uv}</strong></div>
-        </div>
-
+      <div class="right">
         <div class="sun">
-          <h4>Sun (today)</h4>
-          <div>Sunrise: <strong>${result.forecast[0].astro.sunrise}</strong></div>
-          <div>Sunset: <strong>${result.forecast[0].astro.sunset}</strong></div>
+          <% if (forecast && forecast[0]) { %>
+            <div>Sunrise: <strong><%= forecast[0].astro.sunrise %></strong></div>
+            <div>Sunset: <strong><%= forecast[0].astro.sunset %></strong></div>
+          <% } %>
+        </div>
+
+        <div class="chart-wrap glass small">
+          <canvas id="tempChart" width="400" height="220"></canvas>
         </div>
       </div>
     </div>
-
-    <div class="card forecast-card">
-      <h3>Upcoming Days</h3>
-      <div class="forecast-list">
-        ${result.forecast.map(day => `
-          <div class="forecast-day card-3d">
-            <div class="card-inner small">
-              <div class="date">${day.date}</div>
-
-              <div class="icon-row">
-                <img src="https:${day.day.condition_icon}" />
-                <div class="cond">${day.day.condition_text}</div>
-              </div>
-
-              <div class="temps">
-                <span>Max: <strong>${day.day.maxtemp_c}°C</strong></span>
-                <span>Min: <strong>${day.day.mintemp_c}°C</strong></span>
-              </div>
-
-              <div>Rain chance: <strong>${day.day.daily_chance_of_rain}%</strong></div>
-              <div>Precip total: <strong>${day.day.totalprecip_mm} mm</strong></div>
-              <div>Sunrise: <strong>${day.astro.sunrise}</strong>, Sunset: <strong>${day.astro.sunset}</strong></div>
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
   </div>
+
+  <h3 class="forecast-title">7-Day Forecast</h3>
+
+  <div class="forecast-grid">
+    <% forecast.forEach(day => { %>
+      <div class="forecast-card glass small-card">
+        <div class="f-date"><%= day.date %></div>
+        <img class="icon small" src="https:<%= day.day.condition.icon %>" alt="icon" />
+        <div class="f-cond"><%= day.day.condition.text %></div>
+        <div class="f-temps">
+          <span>Max: <strong><%= day.day.maxtemp_c %>°C</strong></span>
+          <span>Min: <strong><%= day.day.mintemp_c %>°C</strong></span>
+        </div>
+        <div>Rain: <strong><%= day.day.daily_chance_of_rain %>%</strong></div>
+      </div>
+    <% }) %>
+  </div>
+
 </section>
-` }) %>
+
+<!-- embed chart data for client -->
+<script type="application/json" id="chart-data">
+  <%- JSON.stringify(chart) %>
+</script>
+
+<!-- pass weather category for animations -->
+<script>window.WEATHER_CAT = "<%= weatherCategory %>";</script>
